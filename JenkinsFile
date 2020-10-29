@@ -1,0 +1,13 @@
+#!groovy
+
+Def server = Artificatory.server "artifactory"
+Def rtGradle = Artifactofy.newGradleBuild()
+rtGradle.tool = "Gradle"
+rtGradle.deployer repo: 'libs-release-local', server:server
+rtGradle.deployer.artifactDeploymentPatterns.addInclude("**/*.war")
+
+Try{
+ Stage ('Build'){
+	rtGradle.run buildFile : 'build.gradle', task : 'clean build', switches: '--stacktrace'
+	}
+}
